@@ -12,4 +12,5 @@ Trial data can be downloaded from Shahani research group website.
 
 Shahani Group (http://shahanilab.engin.umich.edu)
     
-# If you are using MTEX for your research, please cite one of the following paper.
+# Reference Publications
+If you are using MTEX for your research, please cite following paper.
