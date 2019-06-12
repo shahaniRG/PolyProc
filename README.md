@@ -8,9 +8,9 @@ MTEX is a required Dependency for the code (https://mtex-toolbox.github.io).
 (PolyProc codes are compatible with MTEX v. 5.1 and beyond)
     
 # Trial data
-Trial data can be downloaded from Shahani research group website.
+Trial data can be downloaded from the following link.
 
-Shahani Group (http://shahanilab.engin.umich.edu)
+https://bit.ly/2R8SZgC 
     
 # Reference Publications
 If you are using MTEX for your research, please cite following paper.
