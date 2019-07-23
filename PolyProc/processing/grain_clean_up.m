@@ -159,9 +159,11 @@ function [gid_map, rodV, comp, numElement, grain_rodV, grain_coord, grain_surfac
     % Rodrigues update
     
     % (4) apply rotation to each rodrigues elements
-    rodV(1,:,:,:) = rodV(1,:,:,:) + rot_rod.x;
-    rodV(2,:,:,:) = rodV(2,:,:,:) + rot_rod.y;
-    rodV(3,:,:,:) = rodV(3,:,:,:) + rot_rod.z;
+    denom = 1-(rodV(1,:,:,:).*rot_rod.x + rodV(2,:,:,:).*rot_rod.y + rodV(3,:,:,:).*rot_rod.z);
+    rodV(1,:,:,:) = (  (rodV(1,:,:,:) + rot_rod.x) - ( rodV(2,:,:,:).*rot_rod.z - rodV(3,:,:,:).*rot_rod.y ) ) ./ denom;
+    rodV(2,:,:,:) = (  (rodV(2,:,:,:) + rot_rod.y) - ( rodV(3,:,:,:).*rot_rod.x - rodV(1,:,:,:).*rot_rod.z ) ) ./ denom;
+    rodV(3,:,:,:) = (  (rodV(3,:,:,:) + rot_rod.z) - ( rodV(1,:,:,:).*rot_rod.y - rodV(2,:,:,:).*rot_rod.x ) ) ./ denom;
+
     
     fprintf('Data have been transformed.\n')
     
@@ -194,6 +196,15 @@ function [gid_map, rodV, comp, numElement, grain_rodV, grain_coord, grain_surfac
                     3*ones(size(x)),x,y,z)));
     end
     
+                    %     rodV_voxel = zeros(size(x,1),3);
+                    %     
+                    %     for i = 1:size(x,1)
+                    %         
+                    %                 rodV_voxel(i,:) = [ rodV(  sub2ind(size(rodV), 1  ,  x(i),  y(i),  z(i)) ), ...
+                    %                 rodV(  sub2ind(size(rodV), 2  ,  x(i),  y(i),  z(i)) ), ...
+                    %                 rodV(  sub2ind(size(rodV), 3  ,  x(i),  y(i),  z(i)) )];
+                    %     end
+            
     % Initialize some variables
     gid_map_new = gid_map;
     noGrains = numel(unique(gid_map_new(:))); % this contains '0'(space in the unique grain list)
