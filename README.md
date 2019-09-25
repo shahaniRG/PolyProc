@@ -27,4 +27,4 @@ Trial data can be downloaded from the following link.
 https://bit.ly/2R8SZgC 
     
 # Reference Publications
-reference information is soon to be updated.
+J. Kang, N. Lu, I. Loo, N. Senabulya, and A.J. Shahani, “PolyProc: A Modular Processing Pipeline for X-ray Diffraction Tomography,” Integr. Mater. Manuf. Innov. (2019). https://doi.org/10.1007/s40192-019-00147-2
