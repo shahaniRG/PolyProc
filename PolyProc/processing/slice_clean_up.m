@@ -10,13 +10,7 @@ function [gid_map]=slice_clean_up(filename,slice_position,cs,misoriThresh,confiT
 %                               
 %   slice_position : (string) location of the slice of interest
 %                               
-%   cs :             (string) crystal symmetry (default: 'cubic')   
-%
-%   misoriThresh :   (number) misorientation threshold angle for identifying grain
-%                     boundaries (degrees) (default: 4)
-%
-%   confiThresh :    (number) confidence threshold with a range of [0 1] used
-%                     to identify off sample vs. on sample points (default: 0.3)
+%   
 %OPTIONAL :
 %   cs :             (string) crystal symmetry (default: 'cubic')   
 %
