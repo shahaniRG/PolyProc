@@ -1,5 +1,5 @@
 function [gid_map]=slice_clean_up(filename,slice_position,cs,misoriThresh,confiThresh)
-% Identifies, segments, and maps grains
+% Identifies, segments, and maps grains for 2D slices of HEDM data
 %==========================================================================
 % FILENAME:          slice_clean_up.m
 % DATE:              25 September, 2019      
