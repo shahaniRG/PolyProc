@@ -4,7 +4,7 @@
 % boundaries, and sphericity. Currently only supports cubic symmetries.
 %==========================================================================
 % FILENAME:          grain_stat.m
-% DATE:              1 May, 2019        
+% DATE:              1 May, 2020        
 % PURPOSE:           statistical results of grains and their boundaries
 %==========================================================================
 %IN :
@@ -39,11 +39,21 @@
 %% Distribution of Grain Size
 
 fprintf('Plotting distribution of grain size.\n');
-figure(1)
-histogram(numElement(:,2));
-title('Volume statistics')
-xlabel('Volume of grain (voxel)')
-ylabel('Frequency (number of grains)')
+
+equi_radius = (.75/pi()*numElement(:,2)).^(1/3);
+figure(1);
+h5 = histogram(equi_radius);
+h5.Normalization = 'pdf';
+title('Grain size statistics')
+xlabel('equivalent grain radious (\mum)')
+ylabel('probability density \itp(x)')
+
+hold on
+pd = fitdist(equi_radius,'lognormal');
+x_values = min(equi_radius)-2:(max(equi_radius)-min(equi_radius))/100:max(equi_radius)+2;
+y = pdf(pd,x_values);
+plot(x_values,y,'--','LineWidth',2)
+legend('experimental data','log-normal distribution')
 
 %% Distribution of Neighbors
 
@@ -104,10 +114,10 @@ for j = 1:length(adj)
     gidLocal(gidK) = NaN;
     
     FV = isosurface(gidLocal, (adj(j,1)+adj(j,2))/2);
-    FV = smoothpatch(FV,1,3);
     
-    if size(FV.vertices,1) > 0
+    if size(FV.vertices,1) > 5
         
+        FV = smoothpatch(FV,1,3);
         verts = FV.vertices;
         faces = FV.faces;
         e21 =  verts(faces(:, 2), :) - verts(faces(:, 1), :);
@@ -166,32 +176,32 @@ legend('Input data','Random')
 axis tight
 
 %% Sphericity
-fprintf('Plotting distribution of grain sphericity.\n');
-for i = 1:length(numElement)
-    
-    FV = isosurface(gid_map == numElement(i,1));
-    FV = smoothpatch(FV,1,3);
-    verts = FV.vertices;
-    faces = FV.faces;
-    if size(FV.vertices,1) > 0
-        e21 =  verts(faces(:, 2), :) - verts(faces(:, 1), :);
-        e31 = verts(faces(:, 3), :) - verts(faces(:, 1), :);
-        each_area = cross(e21, e31, 2);
-        area = 1/2 * sum(sqrt(sum(each_area.^2, 2)));
-
-        volume = sum(sum(sum(gid_map == numElement(i,1))));
-
-        numElement(i,3) = area;
-        numElement(i,4) = volume;
-    end
-end
-
-numElement(:,5) = (pi()^(1/3).*(6*numElement(:,4)).^(2/3))./(numElement(:,3));
-grain_info = numElement;
-
-figure(4)
-histogram(numElement(:,5),20,'EdgeColor','k');
-xlabel('Sphericity')
-ylabel('Frequency (number of grains)')
-title('Sphericity statistics')
+% fprintf('Plotting distribution of grain sphericity.\n');
+% for i = 1:length(numElement)
+%     
+%     FV = isosurface(gid_map == numElement(i,1));
+%     FV = smoothpatch(FV,1,3);
+%     verts = FV.vertices;
+%     faces = FV.faces;
+%     if size(FV.vertices,1) > 0
+%         e21 =  verts(faces(:, 2), :) - verts(faces(:, 1), :);
+%         e31 = verts(faces(:, 3), :) - verts(faces(:, 1), :);
+%         each_area = cross(e21, e31, 2);
+%         area = 1/2 * sum(sqrt(sum(each_area.^2, 2)));
+% 
+%         volume = sum(sum(sum(gid_map == numElement(i,1))));
+% 
+%         numElement(i,3) = area;
+%         numElement(i,4) = volume;
+%     end
+% end
+% 
+% numElement(:,5) = (pi()^(1/3).*(6*numElement(:,4)).^(2/3))./(numElement(:,3));
+% grain_info = numElement;
+% 
+% figure(4)
+% histogram(numElement(:,5),20,'EdgeColor','k');
+% xlabel('Sphericity')
+% ylabel('Frequency (number of grains)')
+% title('Sphericity statistics')
 end
