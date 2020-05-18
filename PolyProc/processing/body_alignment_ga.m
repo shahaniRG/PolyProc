@@ -2,7 +2,7 @@ function [parameter,gid_map_align,tform,rot_rodri] = body_alignment_ga(filename_
 % body_alignment_auto automatically align 3D object to register multiple time steps
 %==========================================================================
 % FILENAME:          body_alignment_ga.m
-% DATE:              1 May, 2019      
+% DATE:              1 May, 2020      
 % PURPOSE:           automated 3D volume registration
 %==========================================================================
 %IN :
@@ -18,6 +18,9 @@ function [parameter,gid_map_align,tform,rot_rodri] = body_alignment_ga(filename_
 %                 (1*3 array) each different range of alpha, beta, gamma rotation angle are available
 %    threshold  : (double) setting up the misfit tolerance thershold
 %                   defulat : 0.02
+%    visualization : visualize two volumes to confirm alignment
+%                   (string) string flag 'viz' will trigger visualization
+%                   default : off
 %
 %OUT :
 %    parameter     : (1*6 array) [alpha, beta, gamma, a, b, c]
@@ -27,7 +30,7 @@ function [parameter,gid_map_align,tform,rot_rodri] = body_alignment_ga(filename_
 %          
 %==========================================================================
 %EXAMPLE :
-%    Parameter = body_alignment_ga('t1_1.h5','t2_1.h5','angle',[7,7,7]);
+%    Parameter = body_alignment_ga('t1_1.h5','t2_1.h5','angle',[7,7,7],'viz');
 %    (out) Parameter = [0.44 , 6.41 , -1.11, 5.59, 4.44, 15.60]
 %==========================================================================
 tic
@@ -173,21 +176,23 @@ Tz = parameter(6);
     gid_map_align = imwarp(Target_ori,tform,'OutputView',imref3d(size(Ref)),'interp','nearest');
     
 %% confirmation
-    figure
-    S_A = isosurface(Ref_ori,0);
-    patch(smoothpatch(S_A,1,3), 'Facecolor', 'blue', 'EdgeColor', 'none','FaceAlpha',0.1);    
-    hold on
-    S_B = isosurface(gid_map_align,0);
-    patch(smoothpatch(S_B,1,3), 'Facecolor', 'red', 'EdgeColor', 'none','FaceAlpha',0.3);    
-    hold off
-    xlabel('x');
-    ylabel('y');
-    zlabel('z');
-    title_name = sprintf('%s %s alignment',filename_object,filename_reference);
-    title(title_name)
-    axis equal
-    view([20,30])
-    legend(filename_reference,filename_object)
-
+    if	any(strcmp(varargin,'viz'))
+    
+        figure
+        S_A = isosurface(Ref_ori,0);
+        patch(smoothpatch(S_A,1,3), 'Facecolor', 'blue', 'EdgeColor', 'none','FaceAlpha',0.1);    
+        hold on
+        S_B = isosurface(gid_map_align,0);
+        patch(smoothpatch(S_B,1,3), 'Facecolor', 'red', 'EdgeColor', 'none','FaceAlpha',0.3);    
+        hold off
+        xlabel('x');
+        ylabel('y');
+        zlabel('z');
+        title_name = sprintf('%s %s alignment',filename_object,filename_reference);
+        title(title_name)
+        axis equal
+        view([20,30])
+        legend(filename_reference,filename_object)
+    end
 
 end
