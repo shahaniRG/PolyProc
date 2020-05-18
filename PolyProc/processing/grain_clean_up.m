@@ -6,7 +6,7 @@ function [gid_map, rodV, comp, numElement, grain_rodV, grain_coord, grain_surfac
 % and exclude untrustworthy grain.     
 %==========================================================================
 % FILENAME:          grain_clean_up.m
-% DATE:              1 May, 2019     
+% DATE:              1 May, 2020     
 % PURPOSE:           process DCT data set
 %==========================================================================
 %IN :
@@ -25,6 +25,12 @@ function [gid_map, rodV, comp, numElement, grain_rodV, grain_coord, grain_surfac
 %          default : no registration on scalar data(no translation, no rotation)
 %     |---(1*1 vector3d) contains rotation rodrigues vectors of each grain direction
 %          default : no rotation on vector data
+%
+%    oriNote            : (str) specify orientation notation
+%       notation types
+%       |---'rodrigues' (default)
+%       |---'euler'
+%       |---further_update  - to be updated
 %
 %    misoriThresh       : (double) angular threshold
 %                         default : 1
@@ -60,12 +66,35 @@ function [gid_map, rodV, comp, numElement, grain_rodV, grain_coord, grain_surfac
 %              grain_clean_up('t2_1.h5');
 %
 %==========================================================================
+    %% Define directory for gid_map, ori_map, and confidence/completeness_map
 
+    data_structure_prompts={'Directory for grain ID map',...
+                            'Directory for orientation map',...
+                            'Directory for confidence/completeness map' };
+    default_data_structure={'/LabDCT/Data/GrainId',...
+                            '/LabDCT/Data/Rodrigues',...
+                            '/LabDCT/Data/Completeness'};
 
-    % Read in Grain Id Map, rodrigues vectors, voxel size, and completeness
-    gid_map = h5read(file_name,'/LabDCT/Data/GrainId');
-    rodV = h5read(file_name,'/LabDCT/Data/Rodrigues');
-    comp = double(h5read(file_name,'/LabDCT/Data/Completeness'));
+    %Dialgoue Box Formatting
+    dims=[2 70];
+    opts.Interpreter='tex';
+
+    data_directory=inputdlg(data_structure_prompts,'HDF5 Structure',dims,default_data_structure,opts);
+    
+    %% Load data from defined directory
+    
+    gid_map = h5read(file_name,data_directory{1});
+    comp = double(h5read(file_name,data_directory{3}));
+    if any(strcmp(varargin,'oriNote'))
+        idx = find(strcmp(varargin,'oriNote'))+1;
+        if strcmp('rodrigues', varargin{idx})
+            rodV = h5read(file_name,data_directory{2});
+        elseif strcmp('euler', varargin{idx})
+            eulerAng = h5read(file_name,data_directory{2});
+        end
+    else
+        rodV = h5read(file_name,data_directory{2});
+    end    
     
    %% Default values
    defaultCrystal = 'cubic';
@@ -129,6 +158,19 @@ function [gid_map, rodV, comp, numElement, grain_rodV, grain_coord, grain_surfac
     end
 
     fprintf('Thresholds are identified.\n')
+    
+    %% Convert input Orientation notation into Rodrigues vector format
+    
+    if exist('eulerAng','var')
+        [~,l,m,n] = size(eulerAng);
+        eulerAng_mtex=orientation.byEuler(reshape(eulerAng(1,:,:,:),l,m,n),reshape(eulerAng(2,:,:,:),l,m,n),reshape(eulerAng(3,:,:,:),l,m,n),cs);
+        rodV_mtex = Rodrigues(eulerAng_mtex);
+        rodV=zeros(3,l,m,n);
+        rodV(1,:,:,:)=rodV_mtex.x;
+        rodV(2,:,:,:)=rodV_mtex.y;
+        rodV(3,:,:,:)=rodV_mtex.z;
+    end
+    
     %% Applying Transformation (translation + roatation) + Rodrigues update + Mask Matrix = Setting Region of Interest
 
     % Transformation (translation + rotation)
