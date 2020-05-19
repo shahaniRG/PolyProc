@@ -10,15 +10,23 @@ PolyProc is an open source MATLAB toolbox for the processing and analysis of gra
 * visualization - 3D volume, 2D slice, grain boundary, multimodal, PMDF
 * grain tracking
     
+# MATLAB requirements
+1. MATLAB version – 2019a or newer version
+
+2. Required MATLAB toolboxes
+- Statistical and Machine learning Toolbox
+- Global Optimization Toolbox
+- Image processing toolbox
+- Optimization Toolbox
+- Text Analytics Toolbox
 
 # Dependency
 PolyProc requires the following dependencies:
 
-1. MATLAB Global Optimization Toolbox is required Dependency for alignment part of the code
-(https://www.mathworks.com/products/global-optimization.html).
-2. MTEX is a required Dependency for the code (https://mtex-toolbox.github.io)
+1. MTEX is a required Dependency for the code (https://mtex-toolbox.github.io)
 (PolyProc codes are compatible with MTEX v. 5.1 and beyond)
-3. Other required Dependencies are already included in `PolyProc/utilities`.
+
+2. Other required Dependencies are already included in `PolyProc/utilities`.
 
 
 # Trial data
