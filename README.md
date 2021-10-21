@@ -28,6 +28,12 @@ PolyProc requires the following dependencies:
 
 2. Other required Dependencies are already included in `PolyProc/utilities`.
 
+# Getting Started
+From MatLab:
+Home tab > New > Project > from Git > (clone htpps above)
+Download MTEX and save to newly created Project folder, add subfolders to MatLab path
+
+...
 
 # Trial data
 Trial data can be downloaded from the following link.
