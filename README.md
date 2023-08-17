@@ -24,7 +24,7 @@ PolyProc is an open source MATLAB toolbox for the processing and analysis of gra
 PolyProc requires the following dependencies:
 
 1. MTEX is a required Dependency for the code (https://mtex-toolbox.github.io)
-(PolyProc codes are compatible with MTEX v. 5.1 and beyond)
+(All PolyProc codes are tested compatible with MTEX v. 5.1)
 
 2. Other required Dependencies are already included in `PolyProc/utilities`.
 
