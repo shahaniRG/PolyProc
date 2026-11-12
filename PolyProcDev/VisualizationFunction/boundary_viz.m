@@ -27,7 +27,7 @@ function [neighbor_angle, neighbor_angle_axis, neighbor_surface] = ...
 %    [neighbor_angle_2, neighbor_angle_axis_2, neighbor_surface_2]= ...
 %         boundary_viz(gid_map_2, grain_rodV_2, 'cubic', adj_2,'goi', 20);
 %==========================================================================
-cs = crystalSymmetry(crystal);
+cs = crystalSymmetry(crystal)
 
 if any(strcmp(varargin,'goi')) 
     idx = find(strcmp(varargin,'goi'))+1;

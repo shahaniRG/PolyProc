@@ -37,7 +37,7 @@ function Data = compute_feature_properties(Data)
         [x, y, z] = ind2sub(size(gid_map), idx);
         grain_coord(j, :) = mean([x, y, z], 1);
         comp_avg(j) = mean(comp(idx));
-        grain_rodV(j, :) = [nanmean(rodV(1)(idx)), nanmean(rodV(2)(idx)), nanmean(rodV(3)(idx))];
+        grain_rodV(j, :) = [nanmean(rodV(1,idx)), nanmean(rodV(2,idx)), nanmean(rodV(3,idx))];
     end
 
     % Compute adjacency

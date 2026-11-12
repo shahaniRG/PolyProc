@@ -71,7 +71,7 @@ for j = 1:length(goi)
         else
             sprintf('Grain %d does not exist in matrix',goi(j))
         end
-    o1 = orientation(q1, cs);
+    o1 = orientation(rotation(q1(1),q1(2),q1(3),q1(4)), cs);
 
     % Find its first-order nearest neighbors
     spec_gid_list = sum( adj( adj(:,1) == goi(j) | adj(:,2) == goi(j),:), 2) - double(goi(j));
@@ -84,7 +84,7 @@ for j = 1:length(goi)
             redundancy = [redundancy ; goi(j) spec_gid_list(i)];
 
             q2 = rod2quat(grain_rodV(gid_list==spec_gid_list(i),:));
-            o2 = orientation(q2, cs);
+            o2 = orientation(rotation(q2(1),q2(2),q2(3),q2(4)), cs);
 
             gidK = gid_map ~= goi(j) & gid_map ~= spec_gid_list(i);
             gidLocal = double(gid_map);

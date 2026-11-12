@@ -46,7 +46,7 @@ if any(strcmp(varargin, 'orientation'))
     % Vectorized orientation coloring
     grain_orientation = arrayfun(@(i) rod2quat(grain_rodV(i, :)), 1:num_grains, 'UniformOutput', false);
     color_gid_list = cell2mat(arrayfun(@(i) ...
-        oM.orientation2color(orientation(grain_orientation{i}, cs)), ...
+        oM.orientation2color(orientation('quaternion',grain_orientation{i}, cs)), ...
         1:num_grains, 'UniformOutput', false));
 
 elseif any(strcmp(varargin, 'completness'))
@@ -79,8 +79,8 @@ end
 
 % Visualization
 figure;
-parpool('local'); % Ensure parallel pool is active
-parfor i = 1:num_grains
+%parpool('local'); % Ensure parallel pool is active
+for i = 1:num_grains
     % Create isosurface on GPU
     FV = isosurface(gather(gid_map == gid_list(i)));  % Gather only necessary data
     if ~isempty(FV.vertices)

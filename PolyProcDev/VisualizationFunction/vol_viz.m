@@ -57,6 +57,7 @@ function [] = vol_viz(gid_map, numElement, varargin)
 gid_list = unique(gid_map(:));
 gid_list = gid_list(2:end);
 color_gid_list = zeros(length(gid_list),3);
+num_grains = length(gid_list);
 
 %% define selective grains
 if any(strcmp(varargin,'selective')) 
@@ -92,27 +93,25 @@ if ~any(strcmp(varargin,'orientation') | ...
         
     
 elseif any(strcmp(varargin,'orientation')) 
-    %coloring based on crystallographic direction
     idx = find(strcmp(varargin,'orientation'))+1;
     grain_rodV = varargin{idx};
     crystal = varargin{idx+1};
     cs = crystalSymmetry(crystal);
     oM = ipfHSVKey(cs);
-    oM.inversePoleFigureDirection = yvector;
+    oM.inversePoleFigureDirection = zvector;
     for i = 1:length(gid_list)
-        if ismember(gid_list(i),numElement(:,1))
-            q1 = rod2quat((grain_rodV(numElement(:,1) == gid_list(i),:)));
-            o1 = orientation(q1, cs);
+        %if ismember(gid_list(i),numElement(:,1))
+            q1 = rod2quat(grain_rodV(i, :));
+            o1 = orientation(rotation(q1(1),q1(2),q1(3),q1(4)), cs);
             if isnan(o1.phi1)
                 color_gid_list(i,:) = [0 0 0];
             else
                 color_gid_list(i,:) = oM.orientation2color(o1);
             end
-        else 
-            color_gid_list(i,:) = [0 0 0];
-        end
+        %else 
+        %    color_gid_list(i,:) = [0 0 0];
+        %end
     end
-    
     
 elseif any(strcmp(varargin,'completness')) 
     %coloring based on average completeness

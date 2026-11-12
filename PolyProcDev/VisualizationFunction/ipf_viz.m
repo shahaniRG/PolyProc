@@ -27,7 +27,10 @@ figure;
 for i = 1:length(gid_list)
     
     q1 = rod2quat(grain_rodV(i,:));
-    o1 = orientation(q1, cs);
+    disp(q1)
+    disp(rotation(q1(1),q1(2),q1(3),q1(4)))
+    o1 = orientation(rotation(q1(1),q1(2),q1(3),q1(4)), cs);
+    disp(o1)
     
     plotIPDF(o1,oM.orientation2color(o1),zvector,'MarkerSize',10);
     hold on;
